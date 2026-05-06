@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Pro-Video Editor | Đăng Tùng</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #0f0f13;
+            --surface-color: rgba(25, 25, 30, 0.6);
+            --primary-color: #00f0ff;
+            --primary-hover: #00c3ff;
+            --text-main: #ffffff;
+            --text-muted: #888891;
+            --border-color: rgba(255, 255, 255, 0.1);
+            --glass-blur: blur(16px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+            /* Khử nháy giật cho toàn bộ thao tác */
+            -webkit-font-smoothing: antialiased;
+            backface-visibility: hidden;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            background-image: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* --- HEADER --- */
+        header {
+            width: 100%;
+            padding: 2rem 4rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(15, 15, 19, 0.8);
+            backdrop-filter: var(--glass-blur);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .logo span {
+            color: var(--primary-color);
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+        }
+
+        .author {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* --- MAIN CONTAINER --- */
+        main {
+            width: 100%;
+            max-width: 1200px;
+            padding: 3rem 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            flex: 1;
+        }
+
+        .panel {
+            background: var(--surface-color);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 2.5rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .panel:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 240, 255, 0.05);
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        h2::before {
+            content: '';
+            display: block;
+            width: 4px;
+            height: 24px;
+            background: var(--primary-color);
+            border-radius: 2px;
+            box-shadow: 0 0 8px var(--primary-color);
+        }
+
+        /* --- UPLOAD ZONE --- */
+        .upload-zone {
+            border: 2px dashed var(--border-color);
+            border-radius: 16px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(0,0,0,0.2);
+            margin-bottom: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .upload-zone:hover, .upload-zone.dragover {
+            border-color: var(--primary-color);
+            background: rgba(0, 240, 255, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.7;
+        }
+
+        .upload-text {
+            font-size: 1.1rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        /* --- SETTINGS --- */
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .setting-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        /* Custom Toggle Switch */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 28px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(255,255,255,0.1);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-color);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(22px);
+        }
+
+        /* --- ACTION BUTTON --- */
+        .btn-render {
+            width: 100%;
+            padding: 1.2rem;
+            font-size: 1.2rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #000;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            margin-top: 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-render:hover {
+            background: var(--primary-hover);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
+            transform: scale(1.02);
+        }
+
+        .btn-render:active {
+            transform: scale(0.98);
+        }
+
+        /* --- PROGRESS BAR --- */
+        .progress-container {
+            display: none;
+            margin-top: 2rem;
+            width: 100%;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            width: 0%;
+            height: 100%;
+            background: var(--primary-color);
+            box-shadow: 0 0 10px var(--primary-color);
+            transition: width 0.3s ease-out;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            main {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">AI<span>Pro</span>Editor</div>
+        <div class="author">System by Đăng Tùng</div>
+    </header>
+
+    <main>
+        <!-- Cột 1: Tải tài nguyên -->
+        <div class="panel">
+            <h2>Media Input</h2>
+            
+            <div class="upload-zone" id="video-upload">
+                <div class="upload-icon">🎥</div>
+                <div class="upload-text">Kéo thả Video thô hoặc Click để chọn</div>
+                <input type="file" id="video-input" multiple accept="video/*" style="display: none;">
+            </div>
+
+            <div class="upload-zone" id="audio-upload" style="min-height: 150px;">
+                <div class="upload-icon">🎵</div>
+                <div class="upload-text">Tải lên File Nhạc (MP3/WAV)</div>
+                <input type="file" id="audio-input" accept="audio/*" style="display: none;">
+            </div>
+        </div>
+
+        <!-- Cột 2: Cấu hình AI -->
+        <div class="panel">
+            <h2>AI Processing Pipeline</h2>
+            
+            <div class="settings-list">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Smart Beat-Sync</h3>
+                        <p>Tự động cắt cảnh khớp với nhịp điệu nhạc (Onset/BPM)</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Speed Ramping</h3>
+                        <p>Làm mượt chuyển động, slow-motion ở đầu nhịp</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Depth-Aware Text</h3>
+                        <p>Tách nền AI, kẹp chữ giữa chủ thể và background</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" checked>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Cinematic Color Grade</h3>
+                        <p>Cân bằng trắng & tăng độ rực rỡ chuẩn Vogue/Anime</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <button class="btn-render" id="render-btn" onclick="startRender()">Khởi chạy Pipeline</button>
+
+            <div class="progress-container" id="progress-area">
+                <div class="progress-text">
+                    <span id="status-text">Đang phân tích âm thanh bằng Whisper...</span>
+                    <span id="percent-text">0%</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill" id="progress-bar"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Xử lý sự kiện kéo thả mượt mà (Không flickering)
+        const setupUploadZone = (zoneId, inputId) => {
+            const zone = document.getElementById(zoneId);
+            const input = document.getElementById(inputId);
+
+            zone.addEventListener('click', () => input.click());
+
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.classList.add('dragover');
+            });
+
+            zone.addEventListener('dragleave', () => {
+                zone.classList.remove('dragover');
+            });
+
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                zone.classList.remove('dragover');
+                input.files = e.dataTransfer.files;
+                
+                // Cập nhật text mượt mà
+                const textEl = zone.querySelector('.upload-text');
+                textEl.style.opacity = 0;
+                setTimeout(() => {
+                    textEl.textContent = `Đã chọn ${input.files.length} file`;
+                    textEl.style.opacity = 1;
+                }, 150);
+            });
+
+            input.addEventListener('change', () => {
+                if(input.files.length > 0) {
+                    const textEl = zone.querySelector('.upload-text');
+                    textEl.style.opacity = 0;
+                    setTimeout(() => {
+                        textEl.textContent = `Đã chọn ${input.files.length} file`;
+                        textEl.style.opacity = 1;
+                    }, 150);
+                }
+            });
+        };
+
+        setupUploadZone('video-upload', 'video-input');
+        setupUploadZone('audio-upload', 'audio-input');
+
+        // Mô phỏng quá trình Render mượt mà
+        function startRender() {
+            const btn = document.getElementById('render-btn');
+            const progressArea = document.getElementById('progress-area');
+            const progressBar = document.getElementById('progress-bar');
+            const statusText = document.getElementById('status-text');
+            const percentText = document.getElementById('percent-text');
+
+            btn.style.display = 'none';
+            progressArea.style.display = 'block';
+
+            let progress = 0;
+            const steps = [
+                { limit: 20, text: "Đang phân tích Beat & Onset..." },
+                { limit: 50, text: "Đang trích xuất Lyrics (Whisper)..." },
+                { limit: 80, text: "Đang áp dụng Depth-Aware Masking..." },
+                { limit: 100, text: "Đang Render Video (HEVC)..." }
+            ];
+
+            const interval = setInterval(() => {
+                progress += Math.random() * 2;
+                if (progress > 100) progress = 100;
+
+                progressBar.style.width = progress + '%';
+                percentText.textContent = Math.round(progress) + '%';
+
+                const currentStep = steps.find(s => progress <= s.limit);
+                if (currentStep && statusText.textContent !== currentStep.text) {
+                    statusText.style.opacity = 0;
+                    setTimeout(() => {
+                        statusText.textContent = currentStep.text;
+                        statusText.style.opacity = 1;
+                    }, 200);
+                }
+
+                if (progress === 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        statusText.textContent = "Hoàn tất! Video đã sẵn sàng.";
+                        statusText.style.color = "var(--primary-color)";
+                        setTimeout(() => {
+                            btn.style.display = 'block';
+                            btn.textContent = "Tải xuống Video";
+                            progressArea.style.display = 'none';
+                            progress = 0;
+                            progressBar.style.width = '0%';
+                        }, 2000);
+                    }, 500);
+                }
+            }, 100);
+        }
+    </script>
+</body>
+</html>
