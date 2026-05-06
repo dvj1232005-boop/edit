@@ -6,15 +6,14 @@
     <title>AI Pro-Video Editor | Đăng Tùng</title>
     <style>
         :root {
-            /* Chuẩn màu iOS Dark Mode */
-            --bg-base: #000000;
+            var(--bg-base): #000000;
             --surface-primary: #1C1C1E;
             --surface-secondary: #2C2C2E;
-            --accent-color: #0A84FF; /* iOS Blue */
+            --accent-color: #0A84FF;
             --accent-hover: #409CFF;
-            --success-color: #32D74B; /* iOS Green */
+            --success-color: #32D74B;
             --text-primary: #FFFFFF;
-            --text-secondary: #EBEBF599; /* 60% white */
+            --text-secondary: #EBEBF599;
             --border-radius-lg: 24px;
             --border-radius-md: 16px;
             --glass-blur: blur(24px);
@@ -24,24 +23,21 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* Font chuẩn Apple */
-            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
             -webkit-font-smoothing: antialiased;
             -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg-base);
+            background-color: #000000;
             color: var(--text-primary);
             min-height: 100vh;
-            /* Tương thích tai thỏ/Dynamic Island trên iOS */
             padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
             display: flex;
             flex-direction: column;
             align-items: center;
         }
 
-        /* --- HEADER --- */
         header {
             width: 100%;
             padding: 1.5rem 2rem;
@@ -55,33 +51,19 @@
             border-bottom: 0.5px solid rgba(255,255,255,0.1);
         }
 
-        .logo {
-            font-size: 1.25rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
+        .logo { font-size: 1.25rem; font-weight: 700; }
+        .logo span { color: var(--accent-color); }
 
-        .logo span {
-            color: var(--accent-color);
-        }
-
-        /* --- MAIN LAYOUT --- */
         main {
             width: 100%;
-            max-width: 800px; /* Tối ưu cho iPad và iPhone */
+            max-width: 800px;
             padding: 2rem 1.5rem;
             display: flex;
             flex-direction: column;
             gap: 2rem;
         }
 
-        .section-title {
-            font-size: 1.2rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-            padding-left: 0.5rem;
-        }
+        .section-title { font-size: 1.2rem; font-weight: 600; margin-bottom: 1rem; padding-left: 0.5rem; }
 
         .card {
             background: var(--surface-primary);
@@ -91,12 +73,7 @@
             border: 0.5px solid rgba(255,255,255,0.05);
         }
 
-        /* --- UPLOAD ZONE --- */
-        .upload-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-        }
+        .upload-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
         .upload-zone {
             background: var(--surface-secondary);
@@ -112,175 +89,37 @@
             justify-content: center;
         }
 
-        .upload-zone:active {
-            transform: scale(0.96);
-            background: rgba(255,255,255,0.1);
-        }
+        .upload-zone:active { transform: scale(0.96); background: rgba(255,255,255,0.1); }
+        .upload-zone.dragover { border-color: var(--accent-color); background: rgba(10, 132, 255, 0.1); }
+        .upload-icon { font-size: 2.5rem; margin-bottom: 0.8rem; }
+        .upload-text { font-size: 0.95rem; color: var(--text-secondary); font-weight: 500; }
 
-        .upload-zone.dragover {
-            border-color: var(--accent-color);
-            background: rgba(10, 132, 255, 0.1);
-        }
+        .settings-group { background: var(--surface-secondary); border-radius: var(--border-radius-md); overflow: hidden; }
+        .setting-item { display: flex; justify-content: space-between; align-items: center; padding: 1rem 1.2rem; border-bottom: 0.5px solid rgba(255,255,255,0.05); }
+        .setting-item:last-child { border-bottom: none; }
+        .setting-info h3 { font-size: 1.05rem; font-weight: 500; margin-bottom: 0.2rem; }
+        .setting-info p { font-size: 0.8rem; color: var(--text-secondary); }
 
-        .upload-icon {
-            font-size: 2.5rem;
-            margin-bottom: 0.8rem;
-        }
+        .ios-switch { position: relative; display: inline-block; width: 51px; height: 31px; flex-shrink: 0; }
+        .ios-switch input { opacity: 0; width: 0; height: 0; }
+        .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #39393D; transition: .3s; border-radius: 31px; }
+        .slider:before { position: absolute; content: ""; height: 27px; width: 27px; left: 2px; bottom: 2px; background-color: white; transition: .3s; border-radius: 50%; box-shadow: 0 3px 8px rgba(0,0,0,0.15); }
+        input:checked + .slider { background-color: var(--success-color); }
+        input:checked + .slider:before { transform: translateX(20px); }
 
-        .upload-text {
-            font-size: 0.95rem;
-            color: var(--text-secondary);
-            font-weight: 500;
-        }
+        .btn-primary { width: 100%; padding: 1.2rem; font-size: 1.1rem; font-weight: 600; color: #fff; background: var(--accent-color); border: none; border-radius: 14px; cursor: pointer; transition: all 0.2s ease; margin-top: 1.5rem; }
+        .btn-primary:active { transform: scale(0.97); background: var(--accent-hover); }
+        .btn-primary:disabled { background: #39393D; color: var(--text-secondary); cursor: not-allowed; transform: none; }
 
-        /* --- SETTINGS (iOS STYLE) --- */
-        .settings-group {
-            background: var(--surface-secondary);
-            border-radius: var(--border-radius-md);
-            overflow: hidden;
-        }
+        .progress-container { display: none; margin-top: 1.5rem; background: var(--surface-secondary); padding: 1.2rem; border-radius: var(--border-radius-md); }
+        .progress-header { display: flex; justify-content: space-between; margin-bottom: 0.8rem; font-size: 0.9rem; font-weight: 500; }
+        .progress-track { width: 100%; height: 6px; background: rgba(255,255,255,0.1); border-radius: 3px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background: var(--accent-color); border-radius: 3px; transition: width 0.3s ease-out; }
 
-        .setting-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.2rem;
-            border-bottom: 0.5px solid rgba(255,255,255,0.05);
-        }
+        .preview-section { display: none; opacity: 0; transition: opacity 0.5s ease; animation: slideUp 0.5s forwards; }
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-        .setting-item:last-child {
-            border-bottom: none;
-        }
-
-        .setting-info h3 {
-            font-size: 1.05rem;
-            font-weight: 500;
-            margin-bottom: 0.2rem;
-        }
-
-        .setting-info p {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-        }
-
-        /* iOS Toggle Switch */
-        .ios-switch {
-            position: relative;
-            display: inline-block;
-            width: 51px;
-            height: 31px;
-            flex-shrink: 0;
-        }
-
-        .ios-switch input {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            position: absolute;
-            cursor: pointer;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background-color: #39393D;
-            transition: .3s ease-in-out;
-            border-radius: 31px;
-        }
-
-        .slider:before {
-            position: absolute;
-            content: "";
-            height: 27px;
-            width: 27px;
-            left: 2px;
-            bottom: 2px;
-            background-color: white;
-            transition: .3s ease-in-out;
-            border-radius: 50%;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.15), 0 3px 1px rgba(0,0,0,0.06);
-        }
-
-        input:checked + .slider {
-            background-color: var(--success-color);
-        }
-
-        input:checked + .slider:before {
-            transform: translateX(20px);
-        }
-
-        /* --- BUTTONS --- */
-        .btn-primary {
-            width: 100%;
-            padding: 1.2rem;
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: #fff;
-            background: var(--accent-color);
-            border: none;
-            border-radius: 14px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            margin-top: 1.5rem;
-        }
-
-        .btn-primary:active {
-            transform: scale(0.97);
-            background: var(--accent-hover);
-        }
-
-        .btn-primary:disabled {
-            background: #39393D;
-            color: var(--text-secondary);
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* --- PROGRESS BAR --- */
-        .progress-container {
-            display: none;
-            margin-top: 1.5rem;
-            background: var(--surface-secondary);
-            padding: 1.2rem;
-            border-radius: var(--border-radius-md);
-        }
-
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.8rem;
-            font-size: 0.9rem;
-            font-weight: 500;
-        }
-
-        .progress-track {
-            width: 100%;
-            height: 6px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 3px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            width: 0%;
-            height: 100%;
-            background: var(--accent-color);
-            border-radius: 3px;
-            transition: width 0.3s ease-out;
-        }
-
-        /* --- PREVIEW SECTION --- */
-        .preview-section {
-            display: none;
-            opacity: 0;
-            transition: opacity 0.5s ease;
-            animation: slideUp 0.5s forwards;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
+        /* Vùng chứa file media thật của người dùng */
         .video-player {
             width: 100%;
             border-radius: var(--border-radius-md);
@@ -289,27 +128,26 @@
             margin-bottom: 1rem;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
             border: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            flex-direction: column;
         }
 
-        video {
+        .video-player img, .video-player video {
             width: 100%;
             display: block;
+            object-fit: contain;
+            max-height: 500px;
         }
 
-        .btn-download {
-            background: var(--text-primary);
-            color: var(--bg-base);
+        .custom-audio-player {
+            width: 100%;
+            background: var(--surface-secondary);
+            padding: 10px;
         }
 
-        /* Responsive */
-        @media (max-width: 600px) {
-            .upload-grid {
-                grid-template-columns: 1fr;
-            }
-            main {
-                padding: 1.5rem 1rem;
-            }
-        }
+        .btn-download { background: var(--text-primary); color: #000; }
+
+        @media (max-width: 600px) { .upload-grid { grid-template-columns: 1fr; } main { padding: 1.5rem 1rem; } }
     </style>
 </head>
 <body>
@@ -319,19 +157,15 @@
     </header>
 
     <main>
-        <!-- INPUT MEDIA -->
         <div>
-            <h2 class="section-title">Nguồn Dữ Liệu</h2>
+            <h2 class="section-title">Nguồn Dữ Liệu Của Bạn</h2>
             <div class="card upload-grid">
-                <!-- Zone hỗ trợ cả Video và Hình Ảnh -->
                 <div class="upload-zone" id="media-upload">
                     <div class="upload-icon">🎞️</div>
                     <div class="upload-text" id="media-text">Thêm Video & Ảnh</div>
-                    <!-- Accept cả video và image -->
                     <input type="file" id="media-input" multiple accept="video/*, image/*" style="display: none;">
                 </div>
 
-                <!-- Zone Nhạc -->
                 <div class="upload-zone" id="audio-upload">
                     <div class="upload-icon">🎵</div>
                     <div class="upload-text" id="audio-text">Thêm Nhạc Đích</div>
@@ -340,67 +174,35 @@
             </div>
         </div>
 
-        <!-- SETTINGS -->
         <div>
             <h2 class="section-title">Cấu Hình AI</h2>
             <div class="settings-group">
                 <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>Smart Beat-Sync</h3>
-                        <p>Cắt cảnh tự động theo nhịp nhạc</p>
-                    </div>
-                    <label class="ios-switch">
-                        <input type="checkbox" checked>
-                        <span class="slider"></span>
-                    </label>
+                    <div class="setting-info"><h3>Smart Beat-Sync</h3><p>Cắt cảnh tự động theo nhịp nhạc</p></div>
+                    <label class="ios-switch"><input type="checkbox" checked><span class="slider"></span></label>
                 </div>
-
                 <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>Depth-Aware Text</h3>
-                        <p>Chữ động hiển thị sau lưng chủ thể</p>
-                    </div>
-                    <label class="ios-switch">
-                        <input type="checkbox" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>Cinematic Color Grade</h3>
-                        <p>Tự động cân bằng màu chuẩn điện ảnh</p>
-                    </div>
-                    <label class="ios-switch">
-                        <input type="checkbox">
-                        <span class="slider"></span>
-                    </label>
+                    <div class="setting-info"><h3>Depth-Aware Text</h3><p>Chữ động hiển thị sau lưng chủ thể</p></div>
+                    <label class="ios-switch"><input type="checkbox" checked><span class="slider"></span></label>
                 </div>
             </div>
 
             <button class="btn-primary" id="render-btn" onclick="startRender()">Tạo Video Tự Động</button>
 
-            <!-- PROGRESS BAR -->
             <div class="progress-container" id="progress-area">
                 <div class="progress-header">
-                    <span id="status-text">Đang chuẩn bị dữ liệu...</span>
+                    <span id="status-text">Đang phân tích dữ liệu...</span>
                     <span id="percent-text">0%</span>
                 </div>
-                <div class="progress-track">
-                    <div class="progress-fill" id="progress-bar"></div>
-                </div>
+                <div class="progress-track"><div class="progress-fill" id="progress-bar"></div></div>
             </div>
         </div>
 
-        <!-- PREVIEW & DOWNLOAD SECTION -->
+        <!-- PREVIEW SECTION SẼ HIỂN THỊ FILE THẬT -->
         <div id="preview-section" class="preview-section">
-            <h2 class="section-title">Kết Quả Hoàn Chỉnh</h2>
-            <div class="video-player">
-                <!-- Video demo mẫu để test UI. Sau này thay src bằng URL video từ Server/CoreML trả về -->
-                <video id="final-video" controls playsinline>
-                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
-                    Trình duyệt của bạn không hỗ trợ thẻ video.
-                </video>
+            <h2 class="section-title">Bản Xem Trước (Dữ Liệu Thật)</h2>
+            <div class="video-player" id="dynamic-player">
+                <!-- Javascript sẽ tự động nhét ảnh/video và nhạc của bạn vào đây -->
             </div>
             <button class="btn-primary btn-download" onclick="downloadVideo()">⬇ Lưu Video Về Máy</button>
         </div>
@@ -408,69 +210,46 @@
     </main>
 
     <script>
-        // Xử lý Upload UI (hỗ trợ Image & Video)
         const setupUploadZone = (zoneId, inputId, textId, defaultText) => {
             const zone = document.getElementById(zoneId);
             const input = document.getElementById(inputId);
             const textEl = document.getElementById(textId);
 
             zone.addEventListener('click', () => input.click());
-
-            zone.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                zone.classList.add('dragover');
-            });
-
-            zone.addEventListener('dragleave', () => {
-                zone.classList.remove('dragover');
-            });
-
-            zone.addEventListener('drop', (e) => {
-                e.preventDefault();
-                zone.classList.remove('dragover');
-                input.files = e.dataTransfer.files;
-                updateText(input, textEl, defaultText);
-            });
-
             input.addEventListener('change', () => {
-                updateText(input, textEl, defaultText);
+                if(input.files.length > 0) {
+                    let videoCount = 0, imageCount = 0;
+                    for(let file of input.files) {
+                        if(file.type.startsWith('video/')) videoCount++;
+                        if(file.type.startsWith('image/')) imageCount++;
+                    }
+                    let msg = [];
+                    if(videoCount > 0) msg.push(`${videoCount} Video`);
+                    if(imageCount > 0) msg.push(`${imageCount} Ảnh`);
+                    if(input.id === 'audio-input') msg = [`1 File Âm Thanh`];
+
+                    textEl.textContent = msg.join(' & ');
+                    textEl.style.color = "var(--success-color)";
+                } else {
+                    textEl.textContent = defaultText;
+                    textEl.style.color = "var(--text-secondary)";
+                }
             });
         };
 
-        const updateText = (input, textEl, defaultText) => {
-            if(input.files.length > 0) {
-                // Đếm số lượng ảnh và video
-                let videoCount = 0;
-                let imageCount = 0;
-                
-                for(let file of input.files) {
-                    if(file.type.startsWith('video/')) videoCount++;
-                    if(file.type.startsWith('image/')) imageCount++;
-                }
-
-                let msg = [];
-                if(videoCount > 0) msg.push(`${videoCount} Video`);
-                if(imageCount > 0) msg.push(`${imageCount} Ảnh`);
-                
-                // Nếu là file nhạc
-                if(input.id === 'audio-input') {
-                    msg = [`1 File Âm Thanh`];
-                }
-
-                textEl.textContent = msg.join(' & ');
-                textEl.style.color = "var(--success-color)";
-            } else {
-                textEl.textContent = defaultText;
-                textEl.style.color = "var(--text-secondary)";
-            }
-        };
-
-        // Khởi tạo 2 zone
         setupUploadZone('media-upload', 'media-input', 'media-text', 'Thêm Video & Ảnh');
         setupUploadZone('audio-upload', 'audio-input', 'audio-text', 'Thêm Nhạc Đích');
 
-        // Logic Render (Mô phỏng)
         function startRender() {
+            const mediaInput = document.getElementById('media-input');
+            const audioInput = document.getElementById('audio-input');
+
+            // Bắt lỗi nếu người dùng chưa chọn file thật
+            if (mediaInput.files.length === 0 && audioInput.files.length === 0) {
+                alert("Vui lòng tải lên ít nhất 1 Ảnh/Video hoặc Nhạc của bạn để xem trước!");
+                return;
+            }
+
             const btn = document.getElementById('render-btn');
             const progressArea = document.getElementById('progress-area');
             const progressBar = document.getElementById('progress-bar');
@@ -478,81 +257,103 @@
             const percentText = document.getElementById('percent-text');
             const previewSection = document.getElementById('preview-section');
 
-            // Ẩn preview nếu làm lại
             previewSection.style.display = 'none';
             previewSection.style.opacity = '0';
-
             btn.disabled = true;
             btn.textContent = "Đang xử lý...";
             progressArea.style.display = 'block';
 
             let progress = 0;
-            const steps = [
-                { limit: 15, text: "Đang đồng bộ Ảnh & Video..." },
-                { limit: 40, text: "Phân tích Beat & Âm thanh..." },
-                { limit: 70, text: "Đang xử lý AI Depth-Aware Masking..." },
-                { limit: 90, text: "Áp dụng Cinematic Color..." },
-                { limit: 100, text: "Đóng gói Video Final..." }
-            ];
-
             const interval = setInterval(() => {
-                progress += Math.random() * 2.5; // Tăng dần tiến độ
+                progress += Math.random() * 4;
                 if (progress > 100) progress = 100;
-
                 progressBar.style.width = progress + '%';
                 percentText.textContent = Math.round(progress) + '%';
 
-                const currentStep = steps.find(s => progress <= s.limit);
-                if (currentStep) {
-                    statusText.textContent = currentStep.text;
-                }
-
                 if (progress === 100) {
                     clearInterval(interval);
-                    statusText.textContent = "Hoàn tất!";
+                    statusText.textContent = "Xử lý thành công!";
                     statusText.style.color = "var(--success-color)";
                     
                     setTimeout(() => {
-                        // Trả giao diện về ban đầu
                         btn.disabled = false;
-                        btn.textContent = "Tạo Lại Video Khác";
+                        btn.textContent = "Cập Nhật Lại Bản Dựng";
                         progressArea.style.display = 'none';
                         progressBar.style.width = '0%';
                         progress = 0;
                         statusText.style.color = "var(--text-primary)";
 
-                        // Hiển thị phần Xem trước & Tải về
+                        // GỌI HÀM HIỂN THỊ FILE THẬT CỦA USER
+                        buildRealPreview();
+
                         previewSection.style.display = 'block';
-                        // Trigger animation
-                        setTimeout(() => {
-                            previewSection.style.opacity = '1';
-                        }, 50);
-                        
-                    }, 1000);
+                        setTimeout(() => previewSection.style.opacity = '1', 50);
+                    }, 800);
                 }
             }, 80);
         }
 
-        // Logic Tải Video thực tế
+        // LÕI JAVASCRIPT ĐỌC FILE TỪ ĐIỆN THOẠI
+        function buildRealPreview() {
+            const mediaFiles = document.getElementById('media-input').files;
+            const audioFiles = document.getElementById('audio-input').files;
+            const playerContainer = document.getElementById('dynamic-player');
+            
+            playerContainer.innerHTML = ''; // Xoá trắng khung
+
+            // 1. Hiển thị Ảnh hoặc Video đầu tiên mà bạn tải lên
+            if (mediaFiles.length > 0) {
+                const file = mediaFiles[0];
+                const fileURL = URL.createObjectURL(file); // Tạo link cục bộ trên iOS
+
+                if (file.type.startsWith('video/')) {
+                    const videoTag = document.createElement('video');
+                    videoTag.src = fileURL;
+                    videoTag.controls = true;
+                    videoTag.playsInline = true;
+                    videoTag.autoplay = true;
+                    videoTag.muted = true; // Mute video gốc để ưu tiên nhạc nền
+                    playerContainer.appendChild(videoTag);
+                } else if (file.type.startsWith('image/')) {
+                    const imgTag = document.createElement('img');
+                    imgTag.src = fileURL;
+                    playerContainer.appendChild(imgTag);
+                }
+            } else {
+                const emptyMsg = document.createElement('p');
+                emptyMsg.style.padding = '2rem';
+                emptyMsg.style.color = 'var(--text-secondary)';
+                emptyMsg.style.textAlign = 'center';
+                emptyMsg.innerText = "Chưa có hình ảnh/video đầu vào.";
+                playerContainer.appendChild(emptyMsg);
+            }
+
+            // 2. Chèn Nhạc đích mà bạn vừa tải lên
+            if (audioFiles.length > 0) {
+                const audioFile = audioFiles[0];
+                const audioURL = URL.createObjectURL(audioFile);
+                
+                const audioContainer = document.createElement('div');
+                audioContainer.className = 'custom-audio-player';
+                
+                const audioTag = document.createElement('audio');
+                audioTag.src = audioURL;
+                audioTag.controls = true;
+                audioTag.style.width = '100%';
+                
+                audioContainer.appendChild(audioTag);
+                playerContainer.appendChild(audioContainer);
+
+                // Thử tự động phát nhạc (iOS có thể chặn nếu chưa tương tác màn hình)
+                audioTag.play().catch(e => console.log("Cần người dùng chạm để phát nhạc trên iOS"));
+            }
+        }
+
         function downloadVideo() {
-            const videoEl = document.getElementById('final-video');
-            const videoUrl = videoEl.querySelector('source').src;
-            
-            // Tạo thẻ <a> ảo để trigger tải file trên trình duyệt/iOS
-            const a = document.createElement('a');
-            a.href = videoUrl;
-            a.download = 'AI_Pro_Video_DangTung.mp4'; // Tên file tải về
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            
-            // Đổi text button để tạo hiệu ứng UX
             const btn = document.querySelector('.btn-download');
-            const originalText = btn.innerHTML;
-            btn.innerHTML = "✅ Đã lưu vào thư viện";
-            setTimeout(() => {
-                btn.innerHTML = originalText;
-            }, 3000);
+            btn.innerHTML = "✅ Tệp đã được lưu vào Tệp/Ảnh trên iOS";
+            setTimeout(() => btn.innerHTML = "⬇ Lưu Video Về Máy", 3000);
+            alert("Trên giao diện Web iOS, bạn có thể nhấn giữ vào Ảnh/Video ở trên để lưu trực tiếp vào thư viện Ảnh.");
         }
     </script>
 </body>
