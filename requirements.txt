@@ -1,0 +1,15 @@
+# Audio & AI Models
+openai-whisper==20231117
+librosa==0.10.1
+soundfile==0.12.1
+
+# Video Processing & Computer Vision
+moviepy==1.0.3
+opencv-python==4.8.1.78
+numpy==1.26.2
+
+# Background removal (Cho Depth-aware text)
+rembg==2.0.50
+
+# Utilities
+tqdm==4.66.1
