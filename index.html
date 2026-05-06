@@ -2,36 +2,40 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>AI Pro-Video Editor | Đăng Tùng</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0f0f13;
-            --surface-color: rgba(25, 25, 30, 0.6);
-            --primary-color: #00f0ff;
-            --primary-hover: #00c3ff;
-            --text-main: #ffffff;
-            --text-muted: #888891;
-            --border-color: rgba(255, 255, 255, 0.1);
-            --glass-blur: blur(16px);
+            /* Chuẩn màu iOS Dark Mode */
+            --bg-base: #000000;
+            --surface-primary: #1C1C1E;
+            --surface-secondary: #2C2C2E;
+            --accent-color: #0A84FF; /* iOS Blue */
+            --accent-hover: #409CFF;
+            --success-color: #32D74B; /* iOS Green */
+            --text-primary: #FFFFFF;
+            --text-secondary: #EBEBF599; /* 60% white */
+            --border-radius-lg: 24px;
+            --border-radius-md: 16px;
+            --glass-blur: blur(24px);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Inter', sans-serif;
-            /* Khử nháy giật cho toàn bộ thao tác */
+            /* Font chuẩn Apple */
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             -webkit-font-smoothing: antialiased;
-            backface-visibility: hidden;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
-            background-color: var(--bg-color);
-            background-image: radial-gradient(circle at 50% 0%, rgba(0, 240, 255, 0.1) 0%, transparent 50%);
-            color: var(--text-main);
+            background-color: var(--bg-base);
+            color: var(--text-primary);
             min-height: 100vh;
+            /* Tương thích tai thỏ/Dynamic Island trên iOS */
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -40,122 +44,108 @@
         /* --- HEADER --- */
         header {
             width: 100%;
-            padding: 2rem 4rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid var(--border-color);
-            background: rgba(15, 15, 19, 0.8);
+            padding: 1.5rem 2rem;
+            text-align: center;
+            background: rgba(28, 28, 30, 0.7);
             backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
             position: sticky;
             top: 0;
             z-index: 100;
+            border-bottom: 0.5px solid rgba(255,255,255,0.1);
         }
 
         .logo {
-            font-size: 1.5rem;
-            font-weight: 800;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
 
         .logo span {
-            color: var(--primary-color);
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+            color: var(--accent-color);
         }
 
-        .author {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-            font-weight: 600;
-        }
-
-        /* --- MAIN CONTAINER --- */
+        /* --- MAIN LAYOUT --- */
         main {
             width: 100%;
-            max-width: 1200px;
-            padding: 3rem 2rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            flex: 1;
-        }
-
-        .panel {
-            background: var(--surface-color);
-            backdrop-filter: var(--glass-blur);
-            border: 1px solid var(--border-color);
-            border-radius: 24px;
-            padding: 2.5rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-        }
-
-        .panel:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 25px 50px rgba(0, 240, 255, 0.05);
-        }
-
-        h2 {
-            font-size: 1.5rem;
-            margin-bottom: 1.5rem;
-            font-weight: 600;
+            max-width: 800px; /* Tối ưu cho iPad và iPhone */
+            padding: 2rem 1.5rem;
             display: flex;
-            align-items: center;
-            gap: 10px;
+            flex-direction: column;
+            gap: 2rem;
         }
 
-        h2::before {
-            content: '';
-            display: block;
-            width: 4px;
-            height: 24px;
-            background: var(--primary-color);
-            border-radius: 2px;
-            box-shadow: 0 0 8px var(--primary-color);
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            padding-left: 0.5rem;
+        }
+
+        .card {
+            background: var(--surface-primary);
+            border-radius: var(--border-radius-lg);
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 0.5px solid rgba(255,255,255,0.05);
         }
 
         /* --- UPLOAD ZONE --- */
+        .upload-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
         .upload-zone {
-            border: 2px dashed var(--border-color);
-            border-radius: 16px;
-            padding: 3rem 2rem;
+            background: var(--surface-secondary);
+            border: 2px dashed rgba(255,255,255,0.15);
+            border-radius: var(--border-radius-md);
+            padding: 2rem 1rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s ease;
-            background: rgba(0,0,0,0.2);
-            margin-bottom: 1.5rem;
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 200px;
         }
 
-        .upload-zone:hover, .upload-zone.dragover {
-            border-color: var(--primary-color);
-            background: rgba(0, 240, 255, 0.05);
+        .upload-zone:active {
+            transform: scale(0.96);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .upload-zone.dragover {
+            border-color: var(--accent-color);
+            background: rgba(10, 132, 255, 0.1);
         }
 
         .upload-icon {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.7;
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
         }
 
         .upload-text {
-            font-size: 1.1rem;
-            font-weight: 400;
-            color: var(--text-muted);
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            font-weight: 500;
         }
 
-        /* --- SETTINGS --- */
+        /* --- SETTINGS (iOS STYLE) --- */
+        .settings-group {
+            background: var(--surface-secondary);
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+        }
+
         .setting-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1.2rem 0;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 1rem 1.2rem;
+            border-bottom: 0.5px solid rgba(255,255,255,0.05);
         }
 
         .setting-item:last-child {
@@ -163,25 +153,26 @@
         }
 
         .setting-info h3 {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 0.3rem;
+            font-size: 1.05rem;
+            font-weight: 500;
+            margin-bottom: 0.2rem;
         }
 
         .setting-info p {
-            font-size: 0.85rem;
-            color: var(--text-muted);
+            font-size: 0.8rem;
+            color: var(--text-secondary);
         }
 
-        /* Custom Toggle Switch */
-        .switch {
+        /* iOS Toggle Switch */
+        .ios-switch {
             position: relative;
             display: inline-block;
-            width: 50px;
-            height: 28px;
+            width: 51px;
+            height: 31px;
+            flex-shrink: 0;
         }
 
-        .switch input {
+        .ios-switch input {
             opacity: 0;
             width: 0;
             height: 0;
@@ -191,97 +182,132 @@
             position: absolute;
             cursor: pointer;
             top: 0; left: 0; right: 0; bottom: 0;
-            background-color: rgba(255,255,255,0.1);
-            transition: .4s;
-            border-radius: 34px;
+            background-color: #39393D;
+            transition: .3s ease-in-out;
+            border-radius: 31px;
         }
 
         .slider:before {
             position: absolute;
             content: "";
-            height: 20px;
-            width: 20px;
-            left: 4px;
-            bottom: 4px;
+            height: 27px;
+            width: 27px;
+            left: 2px;
+            bottom: 2px;
             background-color: white;
-            transition: .4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            transition: .3s ease-in-out;
             border-radius: 50%;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.15), 0 3px 1px rgba(0,0,0,0.06);
         }
 
         input:checked + .slider {
-            background-color: var(--primary-color);
-            box-shadow: 0 0 15px rgba(0, 240, 255, 0.4);
+            background-color: var(--success-color);
         }
 
         input:checked + .slider:before {
-            transform: translateX(22px);
+            transform: translateX(20px);
         }
 
-        /* --- ACTION BUTTON --- */
-        .btn-render {
+        /* --- BUTTONS --- */
+        .btn-primary {
             width: 100%;
             padding: 1.2rem;
-            font-size: 1.2rem;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #000;
-            background: var(--primary-color);
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #fff;
+            background: var(--accent-color);
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             cursor: pointer;
-            margin-top: 2rem;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.2s ease;
+            margin-top: 1.5rem;
         }
 
-        .btn-render:hover {
-            background: var(--primary-hover);
-            box-shadow: 0 0 30px rgba(0, 240, 255, 0.6);
-            transform: scale(1.02);
+        .btn-primary:active {
+            transform: scale(0.97);
+            background: var(--accent-hover);
         }
 
-        .btn-render:active {
-            transform: scale(0.98);
+        .btn-primary:disabled {
+            background: #39393D;
+            color: var(--text-secondary);
+            cursor: not-allowed;
+            transform: none;
         }
 
         /* --- PROGRESS BAR --- */
         .progress-container {
             display: none;
-            margin-top: 2rem;
-            width: 100%;
+            margin-top: 1.5rem;
+            background: var(--surface-secondary);
+            padding: 1.2rem;
+            border-radius: var(--border-radius-md);
         }
 
-        .progress-text {
+        .progress-header {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.8rem;
             font-size: 0.9rem;
-            color: var(--text-muted);
+            font-weight: 500;
         }
 
         .progress-track {
             width: 100%;
-            height: 8px;
+            height: 6px;
             background: rgba(255,255,255,0.1);
-            border-radius: 4px;
+            border-radius: 3px;
             overflow: hidden;
         }
 
         .progress-fill {
             width: 0%;
             height: 100%;
-            background: var(--primary-color);
-            box-shadow: 0 0 10px var(--primary-color);
+            background: var(--accent-color);
+            border-radius: 3px;
             transition: width 0.3s ease-out;
         }
 
+        /* --- PREVIEW SECTION --- */
+        .preview-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            animation: slideUp 0.5s forwards;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .video-player {
+            width: 100%;
+            border-radius: var(--border-radius-md);
+            overflow: hidden;
+            background: #000;
+            margin-bottom: 1rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        video {
+            width: 100%;
+            display: block;
+        }
+
+        .btn-download {
+            background: var(--text-primary);
+            color: var(--bg-base);
+        }
+
         /* Responsive */
-        @media (max-width: 900px) {
-            main {
+        @media (max-width: 600px) {
+            .upload-grid {
                 grid-template-columns: 1fr;
+            }
+            main {
+                padding: 1.5rem 1rem;
             }
         }
     </style>
@@ -290,49 +316,40 @@
 
     <header>
         <div class="logo">AI<span>Pro</span>Editor</div>
-        <div class="author">System by Đăng Tùng</div>
     </header>
 
     <main>
-        <!-- Cột 1: Tải tài nguyên -->
-        <div class="panel">
-            <h2>Media Input</h2>
-            
-            <div class="upload-zone" id="video-upload">
-                <div class="upload-icon">🎥</div>
-                <div class="upload-text">Kéo thả Video thô hoặc Click để chọn</div>
-                <input type="file" id="video-input" multiple accept="video/*" style="display: none;">
-            </div>
+        <!-- INPUT MEDIA -->
+        <div>
+            <h2 class="section-title">Nguồn Dữ Liệu</h2>
+            <div class="card upload-grid">
+                <!-- Zone hỗ trợ cả Video và Hình Ảnh -->
+                <div class="upload-zone" id="media-upload">
+                    <div class="upload-icon">🎞️</div>
+                    <div class="upload-text" id="media-text">Thêm Video & Ảnh</div>
+                    <!-- Accept cả video và image -->
+                    <input type="file" id="media-input" multiple accept="video/*, image/*" style="display: none;">
+                </div>
 
-            <div class="upload-zone" id="audio-upload" style="min-height: 150px;">
-                <div class="upload-icon">🎵</div>
-                <div class="upload-text">Tải lên File Nhạc (MP3/WAV)</div>
-                <input type="file" id="audio-input" accept="audio/*" style="display: none;">
+                <!-- Zone Nhạc -->
+                <div class="upload-zone" id="audio-upload">
+                    <div class="upload-icon">🎵</div>
+                    <div class="upload-text" id="audio-text">Thêm Nhạc Đích</div>
+                    <input type="file" id="audio-input" accept="audio/*" style="display: none;">
+                </div>
             </div>
         </div>
 
-        <!-- Cột 2: Cấu hình AI -->
-        <div class="panel">
-            <h2>AI Processing Pipeline</h2>
-            
-            <div class="settings-list">
+        <!-- SETTINGS -->
+        <div>
+            <h2 class="section-title">Cấu Hình AI</h2>
+            <div class="settings-group">
                 <div class="setting-item">
                     <div class="setting-info">
                         <h3>Smart Beat-Sync</h3>
-                        <p>Tự động cắt cảnh khớp với nhịp điệu nhạc (Onset/BPM)</p>
+                        <p>Cắt cảnh tự động theo nhịp nhạc</p>
                     </div>
-                    <label class="switch">
-                        <input type="checkbox" checked>
-                        <span class="slider"></span>
-                    </label>
-                </div>
-
-                <div class="setting-item">
-                    <div class="setting-info">
-                        <h3>Speed Ramping</h3>
-                        <p>Làm mượt chuyển động, slow-motion ở đầu nhịp</p>
-                    </div>
-                    <label class="switch">
+                    <label class="ios-switch">
                         <input type="checkbox" checked>
                         <span class="slider"></span>
                     </label>
@@ -341,9 +358,9 @@
                 <div class="setting-item">
                     <div class="setting-info">
                         <h3>Depth-Aware Text</h3>
-                        <p>Tách nền AI, kẹp chữ giữa chủ thể và background</p>
+                        <p>Chữ động hiển thị sau lưng chủ thể</p>
                     </div>
-                    <label class="switch">
+                    <label class="ios-switch">
                         <input type="checkbox" checked>
                         <span class="slider"></span>
                     </label>
@@ -352,20 +369,21 @@
                 <div class="setting-item">
                     <div class="setting-info">
                         <h3>Cinematic Color Grade</h3>
-                        <p>Cân bằng trắng & tăng độ rực rỡ chuẩn Vogue/Anime</p>
+                        <p>Tự động cân bằng màu chuẩn điện ảnh</p>
                     </div>
-                    <label class="switch">
+                    <label class="ios-switch">
                         <input type="checkbox">
                         <span class="slider"></span>
                     </label>
                 </div>
             </div>
 
-            <button class="btn-render" id="render-btn" onclick="startRender()">Khởi chạy Pipeline</button>
+            <button class="btn-primary" id="render-btn" onclick="startRender()">Tạo Video Tự Động</button>
 
+            <!-- PROGRESS BAR -->
             <div class="progress-container" id="progress-area">
-                <div class="progress-text">
-                    <span id="status-text">Đang phân tích âm thanh bằng Whisper...</span>
+                <div class="progress-header">
+                    <span id="status-text">Đang chuẩn bị dữ liệu...</span>
                     <span id="percent-text">0%</span>
                 </div>
                 <div class="progress-track">
@@ -373,13 +391,28 @@
                 </div>
             </div>
         </div>
+
+        <!-- PREVIEW & DOWNLOAD SECTION -->
+        <div id="preview-section" class="preview-section">
+            <h2 class="section-title">Kết Quả Hoàn Chỉnh</h2>
+            <div class="video-player">
+                <!-- Video demo mẫu để test UI. Sau này thay src bằng URL video từ Server/CoreML trả về -->
+                <video id="final-video" controls playsinline>
+                    <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+                    Trình duyệt của bạn không hỗ trợ thẻ video.
+                </video>
+            </div>
+            <button class="btn-primary btn-download" onclick="downloadVideo()">⬇ Lưu Video Về Máy</button>
+        </div>
+
     </main>
 
     <script>
-        // Xử lý sự kiện kéo thả mượt mà (Không flickering)
-        const setupUploadZone = (zoneId, inputId) => {
+        // Xử lý Upload UI (hỗ trợ Image & Video)
+        const setupUploadZone = (zoneId, inputId, textId, defaultText) => {
             const zone = document.getElementById(zoneId);
             const input = document.getElementById(inputId);
+            const textEl = document.getElementById(textId);
 
             zone.addEventListener('click', () => input.click());
 
@@ -396,81 +429,130 @@
                 e.preventDefault();
                 zone.classList.remove('dragover');
                 input.files = e.dataTransfer.files;
-                
-                // Cập nhật text mượt mà
-                const textEl = zone.querySelector('.upload-text');
-                textEl.style.opacity = 0;
-                setTimeout(() => {
-                    textEl.textContent = `Đã chọn ${input.files.length} file`;
-                    textEl.style.opacity = 1;
-                }, 150);
+                updateText(input, textEl, defaultText);
             });
 
             input.addEventListener('change', () => {
-                if(input.files.length > 0) {
-                    const textEl = zone.querySelector('.upload-text');
-                    textEl.style.opacity = 0;
-                    setTimeout(() => {
-                        textEl.textContent = `Đã chọn ${input.files.length} file`;
-                        textEl.style.opacity = 1;
-                    }, 150);
-                }
+                updateText(input, textEl, defaultText);
             });
         };
 
-        setupUploadZone('video-upload', 'video-input');
-        setupUploadZone('audio-upload', 'audio-input');
+        const updateText = (input, textEl, defaultText) => {
+            if(input.files.length > 0) {
+                // Đếm số lượng ảnh và video
+                let videoCount = 0;
+                let imageCount = 0;
+                
+                for(let file of input.files) {
+                    if(file.type.startsWith('video/')) videoCount++;
+                    if(file.type.startsWith('image/')) imageCount++;
+                }
 
-        // Mô phỏng quá trình Render mượt mà
+                let msg = [];
+                if(videoCount > 0) msg.push(`${videoCount} Video`);
+                if(imageCount > 0) msg.push(`${imageCount} Ảnh`);
+                
+                // Nếu là file nhạc
+                if(input.id === 'audio-input') {
+                    msg = [`1 File Âm Thanh`];
+                }
+
+                textEl.textContent = msg.join(' & ');
+                textEl.style.color = "var(--success-color)";
+            } else {
+                textEl.textContent = defaultText;
+                textEl.style.color = "var(--text-secondary)";
+            }
+        };
+
+        // Khởi tạo 2 zone
+        setupUploadZone('media-upload', 'media-input', 'media-text', 'Thêm Video & Ảnh');
+        setupUploadZone('audio-upload', 'audio-input', 'audio-text', 'Thêm Nhạc Đích');
+
+        // Logic Render (Mô phỏng)
         function startRender() {
             const btn = document.getElementById('render-btn');
             const progressArea = document.getElementById('progress-area');
             const progressBar = document.getElementById('progress-bar');
             const statusText = document.getElementById('status-text');
             const percentText = document.getElementById('percent-text');
+            const previewSection = document.getElementById('preview-section');
 
-            btn.style.display = 'none';
+            // Ẩn preview nếu làm lại
+            previewSection.style.display = 'none';
+            previewSection.style.opacity = '0';
+
+            btn.disabled = true;
+            btn.textContent = "Đang xử lý...";
             progressArea.style.display = 'block';
 
             let progress = 0;
             const steps = [
-                { limit: 20, text: "Đang phân tích Beat & Onset..." },
-                { limit: 50, text: "Đang trích xuất Lyrics (Whisper)..." },
-                { limit: 80, text: "Đang áp dụng Depth-Aware Masking..." },
-                { limit: 100, text: "Đang Render Video (HEVC)..." }
+                { limit: 15, text: "Đang đồng bộ Ảnh & Video..." },
+                { limit: 40, text: "Phân tích Beat & Âm thanh..." },
+                { limit: 70, text: "Đang xử lý AI Depth-Aware Masking..." },
+                { limit: 90, text: "Áp dụng Cinematic Color..." },
+                { limit: 100, text: "Đóng gói Video Final..." }
             ];
 
             const interval = setInterval(() => {
-                progress += Math.random() * 2;
+                progress += Math.random() * 2.5; // Tăng dần tiến độ
                 if (progress > 100) progress = 100;
 
                 progressBar.style.width = progress + '%';
                 percentText.textContent = Math.round(progress) + '%';
 
                 const currentStep = steps.find(s => progress <= s.limit);
-                if (currentStep && statusText.textContent !== currentStep.text) {
-                    statusText.style.opacity = 0;
-                    setTimeout(() => {
-                        statusText.textContent = currentStep.text;
-                        statusText.style.opacity = 1;
-                    }, 200);
+                if (currentStep) {
+                    statusText.textContent = currentStep.text;
                 }
 
                 if (progress === 100) {
                     clearInterval(interval);
+                    statusText.textContent = "Hoàn tất!";
+                    statusText.style.color = "var(--success-color)";
+                    
                     setTimeout(() => {
-                        statusText.textContent = "Hoàn tất! Video đã sẵn sàng.";
-                        statusText.style.color = "var(--primary-color)";
+                        // Trả giao diện về ban đầu
+                        btn.disabled = false;
+                        btn.textContent = "Tạo Lại Video Khác";
+                        progressArea.style.display = 'none';
+                        progressBar.style.width = '0%';
+                        progress = 0;
+                        statusText.style.color = "var(--text-primary)";
+
+                        // Hiển thị phần Xem trước & Tải về
+                        previewSection.style.display = 'block';
+                        // Trigger animation
                         setTimeout(() => {
-                            btn.style.display = 'block';
-                            btn.textContent = "Tải xuống Video";
-                            progressArea.style.display = 'none';
-                            progress = 0;
-                            progressBar.style.width = '0%';
-                        }, 2000);
-                    }, 500);
+                            previewSection.style.opacity = '1';
+                        }, 50);
+                        
+                    }, 1000);
                 }
-            }, 100);
+            }, 80);
+        }
+
+        // Logic Tải Video thực tế
+        function downloadVideo() {
+            const videoEl = document.getElementById('final-video');
+            const videoUrl = videoEl.querySelector('source').src;
+            
+            // Tạo thẻ <a> ảo để trigger tải file trên trình duyệt/iOS
+            const a = document.createElement('a');
+            a.href = videoUrl;
+            a.download = 'AI_Pro_Video_DangTung.mp4'; // Tên file tải về
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            
+            // Đổi text button để tạo hiệu ứng UX
+            const btn = document.querySelector('.btn-download');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = "✅ Đã lưu vào thư viện";
+            setTimeout(() => {
+                btn.innerHTML = originalText;
+            }, 3000);
         }
     </script>
 </body>
